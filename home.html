@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#ffffff">
+  <title>홈</title>
+  <style>
+    *{box-sizing:border-box}
+    html,body{min-height:100%;margin:0;background:#fff}
+    :root{--blue:#1628d2}
+    .home-shell{min-height:100svh;background:#fff}
+    .archive-header{height:60px;border-bottom:1px solid var(--blue);display:grid;grid-template-columns:auto 1fr;align-items:center;padding:0 60px;background:rgba(255,255,255,.94)}
+    .header-logo{display:block;width:300px;height:56px;object-fit:contain;object-position:left center;justify-self:start}
+    .header-meta{font-family:Arial,sans-serif;font-size:8px;letter-spacing:.08em;justify-self:end;display:flex;gap:26px;color:var(--blue)}
+    .header-meta b{font-weight:500}
+    .archive-nav{height:100px;display:flex;align-items:stretch;padding:0 60px;border-bottom:1px solid var(--blue);background:#fff;overflow-x:auto;overflow-y:hidden}
+    .archive-nav a{flex:0 0 90px;width:90px;height:100px;border-right:.5px solid var(--blue);background:#fff;overflow:hidden}
+    .archive-nav img{display:block;width:100%;height:100%;max-width:none;transform:scaleX(1.03);transform-origin:center;object-fit:fill}
+    .archive-nav a:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
+    @media(max-width:680px){.archive-header{grid-template-columns:1fr;padding:0 16px}.header-logo{max-width:calc(100vw - 32px)}.header-meta{display:none}.archive-nav{padding:0 12px}}
+  </style>
+</head>
+<body>
+  <main class="home-shell">
+    <header class="archive-header">
+      <a href="./home.html" aria-label="홈"><img class="header-logo" src="./assets/logo-mov-svg.svg" alt="디자인대학을 해체시키는 시선"></a>
+      <div class="header-meta"><span>PROJECT 01</span><b>SEOUL · KR</b></div>
+    </header>
+    <nav class="archive-nav" aria-label="프로젝트 인덱스">
+      <a href="./index.html?profile=a" aria-label="프로젝트 A"><img src="./assets/button-a-default.svg" alt=""></a>
+      <a href="./index.html?profile=b" aria-label="프로젝트 B"><img src="./assets/button-b-default.svg" alt=""></a>
+      <a href="./index.html?profile=c" aria-label="프로젝트 C"><img src="./assets/button-c-default.svg" alt=""></a>
+      <a href="./index.html?profile=d" aria-label="프로젝트 D"><img src="./assets/button-d-default.svg" alt=""></a>
+      <a href="./index.html?profile=e" aria-label="프로젝트 E"><img src="./assets/button-e-default.svg" alt=""></a>
+      <a href="./index.html?profile=f" aria-label="프로젝트 F"><img src="./assets/button-f-default.svg" alt=""></a>
+      <a href="./index.html?profile=g" aria-label="프로젝트 G"><img src="./assets/button-g-default.svg" alt=""></a>
+      <a href="./index.html?profile=h" aria-label="프로젝트 H"><img src="./assets/button-h-default.svg" alt=""></a>
+      <a href="./index.html?profile=i" aria-label="프로젝트 I"><img src="./assets/button-i-default.svg" alt=""></a>
+      <a href="./index.html?profile=j" aria-label="프로젝트 J"><img src="./assets/button-j-default.svg" alt=""></a>
+    </nav>
+  </main>
+</body>
+</html>
