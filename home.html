@@ -6,19 +6,34 @@
   <meta name="theme-color" content="#ffffff">
   <title>홈</title>
   <style>
+    @font-face{font-family:Pretendard;src:url('./assets/PretendardVariable.woff2') format('woff2-variations');font-weight:45 920;font-style:normal;font-display:swap}
     *{box-sizing:border-box}
     html,body{min-height:100%;margin:0;background:#fff}
+    body{font-family:Pretendard}
     :root{--blue:#1628d2}
     .home-shell{min-height:100svh;background:#fff}
     .archive-header{height:60px;border-bottom:1px solid var(--blue);display:grid;grid-template-columns:auto 1fr;align-items:center;padding:0 60px;background:rgba(255,255,255,.94)}
     .header-logo{display:block;width:300px;height:56px;object-fit:contain;object-position:left center;justify-self:start}
-    .header-meta{font-family:Arial,sans-serif;font-size:8px;letter-spacing:.08em;justify-self:end;display:flex;gap:26px;color:var(--blue)}
+    .header-meta{font-family:Pretendard;font-size:8px;letter-spacing:.08em;justify-self:end;display:flex;gap:26px;color:var(--blue)}
     .header-meta b{font-weight:500}
-    .archive-nav{height:100px;display:flex;align-items:stretch;padding:0 60px;border-bottom:1px solid var(--blue);background:#fff;overflow-x:auto;overflow-y:hidden}
+    .archive-nav{height:100px;display:flex;align-items:stretch;padding:0 60px;border-bottom:1px solid var(--blue);background:#fff;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}
+    .archive-nav::-webkit-scrollbar{display:none;width:0;height:0}
     .archive-nav a{flex:0 0 90px;width:90px;height:100px;border-right:.5px solid var(--blue);background:#fff;overflow:hidden}
     .archive-nav img{display:block;width:100%;height:100%;max-width:none;transform:scaleX(1.03);transform-origin:center;object-fit:fill}
     .archive-nav a:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
-    @media(max-width:680px){.archive-header{grid-template-columns:1fr;padding:0 16px}.header-logo{max-width:calc(100vw - 32px)}.header-meta{display:none}.archive-nav{padding:0 12px}}
+    .home-gallery{height:calc(100svh - 160px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:0 60px;overflow:hidden;background:#fff}
+    .home-gallery figure{--cube-depth:300px;position:relative;min-width:0;margin:0;overflow:hidden;cursor:pointer;user-select:none;perspective:1600px;transition:transform .18s ease}
+    .home-gallery figure.is-pressed{z-index:6;transform:scale(1.012)}
+    .home-gallery figure:not(:last-child){border-right:1px solid var(--blue)}
+    .cube-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:translateZ(calc(var(--cube-depth) * -1));transition:transform .9s cubic-bezier(.55,.05,.18,1);will-change:transform}
+    .cube-panel.is-rolling .cube-inner{transform:translateZ(calc(var(--cube-depth) * -1)) rotateX(-90deg)}
+    .cube-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff}
+    .cube-face.front{transform:rotateX(0deg) translateZ(var(--cube-depth))}
+    .cube-face.next{transform:rotateX(90deg) translateZ(var(--cube-depth))}
+    .home-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:center bottom;pointer-events:none}
+    .home-gallery .cube-arrow{position:absolute;z-index:5;left:0;bottom:18px;width:100%;height:34px;object-fit:contain;object-position:center;pointer-events:none;transition:transform .18s ease}
+    .home-gallery figure.is-pressed .cube-arrow{transform:translateY(2px) scale(1.12)}
+    @media(max-width:680px){.archive-header{grid-template-columns:1fr;padding:0 16px}.header-logo{max-width:calc(100vw - 32px)}.header-meta{display:none}.archive-nav{padding:0 12px}.home-gallery{grid-template-columns:1fr;height:auto;padding:0 16px}.home-gallery figure{height:calc((100svh - 160px)/3)}.home-gallery figure:not(:last-child){border-right:0;border-bottom:1px solid var(--blue)}}
   </style>
 </head>
 <body>
@@ -39,6 +54,52 @@
       <a href="./index.html?profile=i" aria-label="프로젝트 I"><img src="./assets/button-i-default.svg" alt=""></a>
       <a href="./index.html?profile=j" aria-label="프로젝트 J"><img src="./assets/button-j-default.svg" alt=""></a>
     </nav>
+    <section class="home-gallery" aria-label="프로젝트 이미지">
+      <figure class="cube-panel" data-column="first" tabindex="0" role="button" aria-label="첫 번째 프로젝트 큐브 다음 면 보기">
+        <div class="cube-inner">
+          <div class="cube-face front"><img src="./assets/left-card-intro.svg?v=20260906030739" alt="왼쪽 인트로 카드"></div>
+          <div class="cube-face next"><img src="./assets/01 1.svg" alt="프로젝트 01"></div>
+        </div>
+        <img class="cube-arrow" src="./assets/arrow.svg" alt="">
+      </figure>
+      <figure class="cube-panel" data-column="second" tabindex="0" role="button" aria-label="두 번째 프로젝트 큐브 다음 면 보기">
+        <div class="cube-inner">
+          <div class="cube-face front"><img src="./assets/02 1.svg" alt="프로젝트 02 첫 번째 면"></div>
+          <div class="cube-face next"><img src="./assets/02-1 1.svg" alt="프로젝트 02 다음 카드"></div>
+        </div>
+        <img class="cube-arrow" src="./assets/arrow.svg" alt="">
+      </figure>
+      <figure class="cube-panel" data-column="third" tabindex="0" role="button" aria-label="세 번째 프로젝트 큐브 다음 면 보기">
+        <div class="cube-inner">
+          <div class="cube-face front"><img src="./assets/03 1.svg" alt="프로젝트 03 첫 번째 면"></div>
+          <div class="cube-face next"><img src="./assets/03-1 1.svg" alt="프로젝트 03 다음 카드"></div>
+        </div>
+        <img class="cube-arrow" src="./assets/arrow.svg" alt="">
+      </figure>
+    </section>
   </main>
+  <script>
+    const cubeSequences={
+      first:['left-card-intro.svg?v=20260906030739','01 1.svg','01-1 1.svg','04 1.svg','04-1 1.svg','07 1.svg','07-1 1.svg'],
+      second:['02 1.svg','02-1 1.svg','05 1.svg','05-1 1.svg','08 1.svg','08-1 1.svg','10 1.svg','10-1 1.svg'],
+      third:['03 1.svg','03-1 1.svg','06 1.svg','06-1 1.svg','09 1.svg','09-1 1.svg','right-card-ending.svg?v=20260906030755']
+    };
+    document.querySelectorAll('.cube-panel').forEach(card=>{
+      const sequence=cubeSequences[card.dataset.column];
+      const inner=card.querySelector('.cube-inner');
+      const frontImage=card.querySelector('.cube-face.front img');
+      const nextImage=card.querySelector('.cube-face.next img');
+      sequence.forEach(file=>{const preload=new Image();preload.src=`./assets/${file}`});
+      let currentIndex=0,moving=false;
+      const setCubeDepth=()=>card.style.setProperty('--cube-depth',`${card.clientHeight/2}px`);
+      setCubeDepth();
+      if('ResizeObserver' in window)new ResizeObserver(setCubeDepth).observe(card);else window.addEventListener('resize',setCubeDepth);
+      const roll=()=>{if(moving)return;moving=true;card.classList.add('is-pressed');setTimeout(()=>card.classList.remove('is-pressed'),180);card.classList.add('is-rolling')};
+      const imageLabel=file=>file.startsWith('left-card-intro.svg')?'왼쪽 인트로 카드':file.startsWith('right-card-ending.svg')?'오른쪽 엔딩 카드':`프로젝트 ${file.replace(' 1.svg','')}`;
+      inner.addEventListener('transitionend',event=>{if(event.propertyName!=='transform'||!moving)return;currentIndex=(currentIndex+1)%sequence.length;const currentFile=sequence[currentIndex],nextFile=sequence[(currentIndex+1)%sequence.length];inner.style.transition='none';frontImage.src=`./assets/${currentFile}`;frontImage.alt=imageLabel(currentFile);nextImage.src=`./assets/${nextFile}`;nextImage.alt=imageLabel(nextFile);card.classList.remove('is-rolling');void inner.offsetWidth;inner.style.transition='';moving=false});
+      card.addEventListener('click',roll);
+      card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();roll()}});
+    });
+  </script>
 </body>
 </html>
