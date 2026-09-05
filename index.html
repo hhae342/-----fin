@@ -9,6 +9,7 @@
   <title>D—CONSTRUCT — 공간 해체 아카이브</title>
   <style>
     @font-face{font-family:Pretendard;src:url('./assets/PretendardVariable.woff2') format('woff2-variations');font-weight:45 920;font-style:normal;font-display:swap}
+    @font-face{font-family:'Gmarket Sans';src:url('./assets/GmarketSansTTFMedium.ttf') format('truetype');font-weight:500;font-style:normal;font-display:swap}
     :root{--blue:#1628d2;--blue-55:rgba(22,40,210,.55);--blue-25:rgba(22,40,210,.25);--blue-12:rgba(22,40,210,.12);--blue-06:rgba(22,40,210,.06);--paper:#fff;--panel:#e0e3ff}
     *{box-sizing:border-box}
     html{scroll-behavior:smooth}
@@ -20,31 +21,31 @@
     .archive-header{height:60px;border-bottom:1px solid var(--blue);display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 20px;position:relative;z-index:20;background:rgba(255,255,255,.94)}
     .mark{width:132px;height:52px;display:flex;align-items:center;overflow:hidden;text-decoration:none}.mark img{display:block;width:126px;height:auto;object-fit:contain}
     .header-code,.header-meta{font-size:.6875rem;letter-spacing:.08em}.header-meta{justify-self:end;display:flex;gap:26px}.header-meta b{font-weight:500}
-    .archive-board{min-height:calc(100svh - 102px);display:grid;grid-template-columns:minmax(0,1.55fr) minmax(390px,.78fr);position:relative}
-    .visual-field{position:relative;min-height:calc(100svh - 102px);border-right:1px solid var(--blue);overflow:hidden}
+    .archive-nav{height:80px;display:flex;align-items:stretch;padding-left:84px;border-bottom:1px solid var(--blue);background:#fff;position:relative;z-index:19;overflow-x:auto;overflow-y:hidden}
+    .archive-nav button{flex:0 0 70px;width:70px;height:80px;padding:0;border:0;background:#fff;outline:1px solid var(--blue);outline-offset:-1px;cursor:pointer}.archive-nav button img{display:block;width:70px;height:80px;object-fit:contain}.archive-nav button:focus-visible{outline-width:2px;outline-offset:-3px}
+    .archive-board{min-height:calc(100svh - 140px);display:grid;grid-template-columns:minmax(0,1.55fr) minmax(390px,.78fr);position:relative}
+    .visual-field{position:relative;min-height:calc(100svh - 140px);border-right:1px solid var(--blue);overflow:hidden}
     .visual-field::before,.visual-field::after{content:"";position:absolute;background:var(--blue-25);pointer-events:none}.visual-field::before{width:1px;height:100%;left:50%;top:0}.visual-field::after{height:1px;width:100%;left:0;top:55%}
-    .visual-heading{position:absolute;left:20px;top:24px;z-index:5}.visual-heading p{margin:0 0 8px;font-size:.6875rem;letter-spacing:.1em}.visual-heading h1{width:clamp(270px,31vw,470px);margin:0;line-height:0}.visual-heading h1 img{display:block;width:100%;height:auto;object-fit:contain}
-    .scale{position:absolute;z-index:5;font-size:.6875rem;letter-spacing:.08em;background:var(--paper);padding:4px 6px;border:1px solid var(--blue-25)}.scale-top{top:24px;right:20px}.scale-side{left:20px;top:48%;writing-mode:vertical-rl;transform:rotate(180deg)}
+    .visual-heading{position:absolute;left:20px;top:24px;z-index:5}.visual-heading p{margin:0;font-size:.6875rem;letter-spacing:.1em}
+    .scale{position:absolute;z-index:5;font-size:.6875rem;letter-spacing:.08em;background:var(--paper);padding:4px 6px;border:1px solid var(--blue-25)}.scale-top{top:24px;right:20px;pointer-events:none;font-variant-numeric:tabular-nums}.scale-side{left:20px;top:48%;writing-mode:vertical-rl;transform:rotate(180deg)}
     .radar{position:absolute;width:min(56vw,700px);aspect-ratio:1;border:1px solid var(--blue-25);border-radius:50%;left:50%;top:51%;transform:translate(-50%,-50%);pointer-events:none}
     .radar::before,.radar::after,.radar span{content:"";position:absolute;border:1px solid var(--blue-12);border-radius:50%;inset:12%}.radar::after{inset:25%}.radar span:nth-child(1){inset:38%}.radar span:nth-child(2){width:1px;height:112%;border:0;border-left:1px solid var(--blue-25);border-radius:0;left:50%;top:-6%}.radar span:nth-child(3){width:112%;height:1px;border:0;border-top:1px solid var(--blue-25);border-radius:0;left:-6%;top:50%}.radar span:nth-child(4){inset:-8%;border-style:dashed;opacity:.6}
     .object-stage{position:absolute;left:17%;right:8%;top:18%;bottom:12%;display:grid;place-items:center;perspective:1100px;cursor:grab;touch-action:none;user-select:none;z-index:3}.object-stage:active{cursor:grabbing}
     .model{width:350px;height:430px;position:relative;transform-style:preserve-3d;transition:transform .24s ease,filter .35s ease}
-    .footage{display:none;width:min(100%,800px);height:min(100%,500px);overflow:hidden;border:1px solid var(--blue);background:#000;cursor:pointer}.footage video{display:block;width:100%;height:100%;object-fit:contain}.mode-3 .footage{display:block}.mode-3 .model{display:none}
+    .footage,.archive-image{display:none;width:min(700px,100%);height:min(400px,100%);overflow:hidden;border:1px solid var(--blue);background:#000}.footage{cursor:pointer}.footage video,.archive-image img{display:block;width:100%;height:100%;object-fit:cover}.mode-0 .image-elevator,.mode-1 .image-deconstruct,.mode-3 .footage{display:block}.mode-0 .model,.mode-1 .model,.mode-3 .model{display:none}
     .cabin{position:absolute;width:230px;height:300px;left:60px;top:65px;transform-style:preserve-3d;transition:transform .45s cubic-bezier(.2,.8,.2,1)}
     .cabin-front,.cabin-side,.cabin-top{position:absolute;display:block;border:2px solid var(--blue);background:var(--blue-06)}.cabin-front{inset:0;transform:translateZ(72px)}.cabin-side{width:144px;height:300px;left:43px;transform:rotateY(90deg) translateZ(115px);background:var(--blue-12)}.cabin-top{width:230px;height:144px;top:78px;transform:rotateX(90deg) translateZ(150px)}
     .door{position:absolute;width:92px;height:270px;bottom:0;border:1px solid var(--blue-55);background:repeating-linear-gradient(90deg,var(--blue-06) 0 3px,transparent 3px 11px);transform:translateZ(74px)}.door-a{left:18px}.door-b{right:18px}
     .panel{position:absolute;width:42px;height:88px;border:1px solid var(--blue);background:var(--paper);display:grid;place-items:center;font-size:.8125rem;transition:transform .45s ease}.panel-a{left:-10px;top:150px;transform:translateZ(100px)}.panel-b{right:-4px;top:92px;transform:translateZ(92px)}
     .shaft-line{position:absolute;width:1px;height:390px;background:var(--blue-55);top:10px}.line-a{left:98px}.line-b{right:98px}.pulley{position:absolute;width:58px;height:58px;border:1px solid var(--blue);border-radius:50%;top:6px}.pulley::after{content:"";position:absolute;inset:8px;border:1px dashed var(--blue-55);border-radius:50%}.pulley-a{left:72px}.pulley-b{right:72px}.counterweight{position:absolute;width:38px;height:126px;right:38px;top:175px;border:2px solid var(--blue);background:var(--blue-12);transition:transform .45s ease}
     .mode-0 .cabin{transform:rotateY(-24deg)}.mode-0 .panel-a{transform:translate3d(25px,0,100px)}.mode-1 .model{filter:contrast(1.2)}.mode-1 .cabin-front{background:linear-gradient(90deg,transparent 49.7%,var(--blue) 50%,transparent 50.3%)}.mode-2 .cabin{transform:rotateY(18deg) rotateX(-4deg)}
-    .annotation{position:absolute;z-index:6;display:grid;grid-template-columns:24px auto;column-gap:8px;font-size:.6875rem;background:var(--paper);padding:4px}.annotation::after{content:"";position:absolute;height:1px;background:var(--blue);transform-origin:left}.annotation b{grid-row:1/3;width:22px;height:22px;border:1px solid var(--blue);display:grid;place-items:center;font-weight:500}.annotation span{font-weight:600}.annotation em{font-style:normal;opacity:.6}.note-a{left:8%;top:35%}.note-a::after{width:118px;left:100%;top:14px;transform:rotate(11deg)}.note-b{right:3%;top:43%}.note-b::after{width:135px;right:100%;top:14px;transform:rotate(170deg)}.note-c{left:25%;bottom:17%}.note-c::after{width:94px;left:80%;top:-9px;transform:rotate(-49deg)}
-    .view-controls{position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;z-index:10}.view-tabs,.zoom-controls{display:flex}.view-tabs button,.zoom-controls button{min-height:32px;border:1px solid var(--blue);border-right:0;background:var(--paper);padding:0 10px;font-size:.6875rem;cursor:pointer}.view-tabs button:last-child,.zoom-controls button:last-child{border-right:1px solid var(--blue)}.zoom-controls button{width:34px;padding:0;display:grid;place-items:center}.view-tabs button:hover,.view-tabs button.active,.zoom-controls button:hover,.view-tabs button:focus-visible,.zoom-controls button:focus-visible{background:var(--blue);color:var(--paper);outline:none}
-    .profile-panel{padding:0 20px 22px;background:var(--panel);position:relative;z-index:7;overflow:auto;max-height:calc(100svh - 102px)}.panel-label{height:44px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--blue);font-size:.6875rem;letter-spacing:.08em}
-    .profile-card{padding:14px 0 16px;display:grid;grid-template-columns:1fr;justify-items:center;gap:18px;border-bottom:1px solid var(--blue)}.profile-card dl{width:100%}.portrait{width:min(100%,300px);aspect-ratio:1;border:1px solid var(--blue);overflow:hidden;background:var(--blue-06)}.portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 22%}
+    .view-controls{position:absolute;left:20px;right:20px;bottom:18px;display:flex;justify-content:space-between;z-index:10}.view-tabs,.zoom-controls{display:flex}.view-tabs button,.zoom-controls button{min-height:32px;border:1px solid var(--blue);border-right:0;background:var(--paper);padding:0 10px;font-family:Pretendard,sans-serif;font-size:.6875rem;cursor:pointer}.view-tabs button:last-child,.zoom-controls button:last-child{border-right:1px solid var(--blue)}.zoom-controls button{width:34px;padding:0;display:grid;place-items:center}.view-tabs button:hover,.view-tabs button.active,.zoom-controls button:hover,.view-tabs button:focus-visible,.zoom-controls button:focus-visible{background:var(--blue);color:var(--paper);outline:none}
+    .profile-panel{padding:0 20px 22px;background:var(--panel);position:relative;z-index:7;overflow:auto;max-height:calc(100svh - 140px);font-family:Pretendard,sans-serif;font-weight:400}.panel-label{height:44px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--blue);font-size:.6875rem;letter-spacing:.08em}
+    .profile-card{padding:14px 0 16px;display:grid;grid-template-columns:1fr;justify-items:start;gap:18px;border-bottom:1px solid var(--blue)}.profile-card dl{width:100%}.portrait{width:200px;height:300px;border:1px solid var(--blue);overflow:hidden;background:var(--blue-06)}.portrait img{display:block;width:100%;height:100%;object-fit:cover;object-position:center 22%}
     dl{margin:0;align-self:end}dl div{display:grid;grid-template-columns:62px 1fr;gap:6px;padding:7px 0;border-top:1px solid var(--blue-25);font-size:.6875rem}dt{opacity:.55}dd{margin:0;line-height:1.4}
-    .text-section{padding:18px 0 20px;border-bottom:1px solid var(--blue);position:relative}.text-section>p:first-child{margin:0 0 6px;font-size:.6875rem;letter-spacing:.08em;opacity:.62}.text-section h2{margin:0;font-size:1.125rem;line-height:1.3;font-weight:500;letter-spacing:-.04em}.body-copy{margin:15px 0 0;font-size:1rem;line-height:1.65;word-break:keep-all}.section-line{position:absolute;right:0;top:21px;width:34%;height:1px;background:var(--blue-55)}.section-line span{position:absolute;right:0;top:-9px;width:22px;height:22px;background:var(--paper);border:1px solid var(--blue);display:grid;place-items:center;font-size:.6875rem}
-    .archive-footer{height:42px;border-top:1px solid var(--blue);padding:0 20px;display:flex;align-items:center;justify-content:space-between;font-size:.6875rem;letter-spacing:.06em;background:var(--paper);position:relative;z-index:20}
+    .text-section{padding:18px 0 20px;border-bottom:1px solid var(--blue);position:relative}.text-section>p:first-child{margin:0 0 6px;font-size:.875rem;letter-spacing:.08em;opacity:.62}.text-section h2{margin:0;font-family:'Gmarket Sans',Pretendard,sans-serif;font-size:1rem;line-height:1.3;font-weight:500;letter-spacing:-.04em}.body-copy{margin:15px 0 0;font-size:.875rem;line-height:1.65;word-break:keep-all}.section-line{position:absolute;right:0;top:21px;width:34%;height:1px;background:var(--blue-55)}.section-line span{position:absolute;right:0;top:-9px;width:22px;height:22px;background:var(--paper);border:1px solid var(--blue);display:grid;place-items:center;font-size:.6875rem}
     @media(max-width:980px){.archive-board{grid-template-columns:1fr}.visual-field{min-height:720px;border-right:0;border-bottom:1px solid var(--blue)}.profile-panel{max-height:none;display:grid;grid-template-columns:1fr 1fr;gap:0 26px}.panel-label,.profile-card{grid-column:1/-1}.archive-shell{overflow:auto}}
-    @media(max-width:680px){.archive-header{grid-template-columns:1fr auto}.mark{width:108px}.mark img{width:104px}.header-code{display:none}.header-meta span{display:none}.visual-field{min-height:690px}.visual-heading h1{width:min(72vw,330px)}.scale-top{display:none}.object-stage{left:0;right:0;top:20%;transform:scale(.75)}.radar{width:560px}.annotation{transform:scale(.9)}.note-a{left:2%;top:38%}.note-b{right:2%;top:49%}.note-c{left:7%;bottom:18%}.view-tabs button{padding:0 6px}.view-controls{left:12px;right:12px}.profile-panel{display:block;padding:0 16px 18px}.archive-footer span:first-child{display:none}}
+    @media(max-width:680px){.archive-header{grid-template-columns:1fr auto}.mark{width:108px}.mark img{width:104px}.header-code{display:none}.header-meta span{display:none}.archive-nav{padding-left:12px}.visual-field{min-height:690px}.scale-top{display:none}.object-stage{left:0;right:0;top:20%;transform:scale(.75)}.radar{width:560px}.view-tabs button{padding:0 6px}.view-controls{left:12px;right:12px}.profile-panel{display:block;padding:0 16px 18px}}
     @media(prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}}
   </style>
 </head>
@@ -56,13 +57,27 @@
       <div class="header-code">SPACE DESIGN ARCHIVE / 2026</div>
       <div class="header-meta"><span>PROJECT 01</span><b>SEOUL · KR</b></div>
     </header>
+    <nav class="archive-nav" aria-label="프로젝트 인덱스">
+      <button type="button" class="active" data-letter="a" aria-label="프로젝트 A" aria-current="page"><img src="./assets/button-a-active.svg" alt=""></button>
+      <button type="button" data-letter="b" aria-label="프로젝트 B"><img src="./assets/button-b-default.svg" alt=""></button>
+      <button type="button" data-letter="c" aria-label="프로젝트 C"><img src="./assets/button-c-default.svg" alt=""></button>
+      <button type="button" data-letter="d" aria-label="프로젝트 D"><img src="./assets/button-d-default.svg" alt=""></button>
+      <button type="button" data-letter="e" aria-label="프로젝트 E"><img src="./assets/button-e-default.svg" alt=""></button>
+      <button type="button" data-letter="f" aria-label="프로젝트 F"><img src="./assets/button-f-default.svg" alt=""></button>
+      <button type="button" data-letter="g" aria-label="프로젝트 G"><img src="./assets/button-g-default.svg" alt=""></button>
+      <button type="button" data-letter="h" aria-label="프로젝트 H"><img src="./assets/button-h-default.svg" alt=""></button>
+      <button type="button" data-letter="i" aria-label="프로젝트 I"><img src="./assets/button-i-default.svg" alt=""></button>
+      <button type="button" data-letter="j" aria-label="프로젝트 J"><img src="./assets/button-j-default.svg" alt=""></button>
+    </nav>
     <div class="archive-board">
       <section class="visual-field" aria-label="엘리베이터 해체 연구">
-        <div class="visual-heading"><p>OBJECT / ELEVATOR</p><h1><img src="./assets/logo-stay.png" alt="디자인대학을 해체시키는 시선"></h1></div>
-        <div class="scale scale-top">0.0&nbsp;&nbsp; 1.2&nbsp;&nbsp; 2.4&nbsp;&nbsp; 3.6&nbsp;&nbsp; 4.8 M</div>
+        <div class="visual-heading"><p>OBJECT / ELEVATOR</p></div>
+        <div class="scale scale-top" id="mouse-scale">X 0000&nbsp;&nbsp; Y 0000</div>
         <div class="scale scale-side">LEVEL 06&nbsp;&nbsp; / &nbsp;&nbsp;+ 24.800</div>
         <div class="radar" aria-hidden="true"><span></span><span></span><span></span><span></span></div>
-        <div class="object-stage mode-3" id="stage" aria-label="드래그하여 회전하는 엘리베이터 모델">
+        <div class="object-stage mode-3" id="stage" aria-label="엘리베이터 해체 아카이브 화면">
+          <div class="archive-image image-elevator"><img src="./assets/01-footage-poster.jpg" alt="엘리베이터"></div>
+          <div class="archive-image image-deconstruct"><img src="./assets/sources-a.png" alt="엘리베이터 해체 과정"></div>
           <div class="footage" id="footage"><video id="video" src="./assets/01-footage.mp4" poster="./assets/01-footage-poster.jpg" muted playsinline preload="metadata"></video></div>
           <div class="model" id="model">
             <div class="cabin"><span class="cabin-front"></span><span class="cabin-side"></span><span class="cabin-top"></span><span class="door door-a"></span><span class="door door-b"></span></div>
@@ -70,12 +85,9 @@
             <div class="shaft-line line-a"></div><div class="shaft-line line-b"></div><div class="pulley pulley-a"></div><div class="pulley pulley-b"></div><div class="counterweight"></div>
           </div>
         </div>
-        <div class="annotation note-a"><b>01</b><span>DOOR SEQUENCE</span><em>OPEN / 1.8 SEC</em></div>
-        <div class="annotation note-b"><b>02</b><span>VERTICAL TRACE</span><em>24.8 M / 06 LEVELS</em></div>
-        <div class="annotation note-c"><b>03</b><span>SIGHT OVERLAP</span><em>04 SIMULTANEOUS VIEWS</em></div>
         <div class="view-controls" aria-label="시점 조작">
           <div class="view-tabs" role="tablist" aria-label="모델 시점">
-            <button type="button" role="tab" data-view="0">01 / FRONT</button><button type="button" role="tab" data-view="1">02 / SECTION</button><button type="button" role="tab" data-view="2">03 / AXON</button><button type="button" role="tab" data-view="3" class="active" aria-selected="true">04 / EXPLODED</button>
+            <button type="button" role="tab" data-view="0" aria-selected="false">01 엘리베이터</button><button type="button" role="tab" data-view="1" aria-selected="false">02 해체하기</button><button type="button" role="tab" data-view="3" class="active" aria-selected="true">03 해체 경험하기</button>
           </div>
           <div class="zoom-controls">
             <button type="button" id="zoom-in" aria-label="확대"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></button>
@@ -92,20 +104,21 @@
         <article class="text-section"><p>03 / SPATIAL READING</p><h2>해체의 의미</h2><div class="section-line"><span>03</span></div><p class="body-copy">하나의 공간은 하나의 시선으로만 경험되지 않는다.<br>A의 해체는 겹쳐진 경험을 통해 공간을 다시 읽는 과정이다.</p></article>
       </aside>
     </div>
-    <footer class="archive-footer"><span>DRAG OBJECT TO ROTATE · SELECT VIEW TO RECONFIGURE</span><span>HEX / 1628D2</span><span>PAGE 01 / 01</span></footer>
   </main>
   <script>
     (()=>{
-      const stage=document.querySelector('#stage'),model=document.querySelector('#model'),video=document.querySelector('#video'),footage=document.querySelector('#footage');
+      const field=document.querySelector('.visual-field'),stage=document.querySelector('#stage'),model=document.querySelector('#model'),video=document.querySelector('#video'),footage=document.querySelector('#footage'),mouseScale=document.querySelector('#mouse-scale'),indexButtons=[...document.querySelectorAll('.archive-nav button')];
       const tabs=[...document.querySelectorAll('[data-view]')];let view=3,zoom=1,rotation={x:-12,y:24},drag=null;
       const render=()=>{model.style.transform=`scale(${zoom}) rotateX(${rotation.x}deg) rotateY(${rotation.y}deg)`};render();
-      tabs.forEach(tab=>tab.addEventListener('click',()=>{view=Number(tab.dataset.view);stage.className=`object-stage mode-${view}`;tabs.forEach((item,index)=>{const active=index===view;item.classList.toggle('active',active);item.setAttribute('aria-selected',String(active))});video.pause();video.currentTime=0}));
+      indexButtons.forEach(button=>button.addEventListener('click',()=>{indexButtons.forEach(item=>{const active=item===button,letter=item.dataset.letter;item.classList.toggle('active',active);item.toggleAttribute('aria-current',active);item.querySelector('img').src=`./assets/button-${letter}-${active?'active':'default'}.svg`})}));
+      tabs.forEach(tab=>tab.addEventListener('click',()=>{view=Number(tab.dataset.view);stage.className=`object-stage mode-${view}`;tabs.forEach(item=>{const active=Number(item.dataset.view)===view;item.classList.toggle('active',active);item.setAttribute('aria-selected',String(active))});video.pause();video.currentTime=0}));
+      field.addEventListener('pointermove',event=>{const rect=field.getBoundingClientRect();const x=Math.round(event.clientX-rect.left),y=Math.round(event.clientY-rect.top);mouseScale.textContent=`X ${String(x).padStart(4,'0')}   Y ${String(y).padStart(4,'0')}`});
       stage.addEventListener('pointerdown',event=>{if(view===3)return;stage.setPointerCapture(event.pointerId);drag={x:event.clientX,y:event.clientY,rx:rotation.x,ry:rotation.y}});
       stage.addEventListener('pointermove',event=>{if(!drag)return;rotation={x:Math.max(-30,Math.min(8,drag.rx-(event.clientY-drag.y)*.14)),y:drag.ry+(event.clientX-drag.x)*.18};render()});
       ['pointerup','pointercancel'].forEach(name=>stage.addEventListener(name,()=>drag=null));
       document.querySelector('#zoom-in').addEventListener('click',()=>{zoom=Math.min(1.24,zoom+.08);render()});
       document.querySelector('#zoom-out').addEventListener('click',()=>{zoom=Math.max(.76,zoom-.08);render()});
-      document.querySelector('#reset').addEventListener('click',()=>{zoom=1;rotation={x:-12,y:24};render()});
+      document.querySelector('#reset').addEventListener('click',()=>{zoom=1;rotation={x:-12,y:24};view=3;stage.className='object-stage mode-3';tabs.forEach(item=>{const active=Number(item.dataset.view)===view;item.classList.toggle('active',active);item.setAttribute('aria-selected',String(active))});mouseScale.innerHTML='X 0000&nbsp;&nbsp; Y 0000';video.pause();video.currentTime=0;render()});
       const play=()=>{video.currentTime=0;video.play().catch(()=>{})},stop=()=>{video.pause();video.currentTime=0};footage.addEventListener('mouseenter',play);footage.addEventListener('mouseleave',stop);footage.addEventListener('click',()=>video.paused?play():stop);video.addEventListener('ended',stop);
     })();
   </script>
