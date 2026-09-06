@@ -79,6 +79,12 @@
     </section>
   </main>
   <script>
+    const cardTurnSound=new Audio('./assets/universfield-new-notification-040-493469.mp3');
+    const navigationSound=new Audio('./assets/universfield-computer-mouse-click-352734.mp3');
+    cardTurnSound.preload='auto';cardTurnSound.volume=.38;navigationSound.preload='auto';navigationSound.volume=.3;
+    const playSound=sound=>{try{sound.currentTime=0;const playback=sound.play();if(playback)playback.catch(()=>{})}catch(error){}}
+    document.querySelector('.archive-nav').addEventListener('pointerdown',event=>{if(event.target.closest('a'))playSound(navigationSound)});
+    document.querySelector('.archive-nav').addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&event.target.closest('a'))playSound(navigationSound)});
     const cubeSequences={
       first:['left-card-intro.svg?v=20260906030739','01 1.svg','01-1 1.svg','04 1.svg','04-1 1.svg','07 1.svg','07-1 1.svg'],
       second:['02 1.svg','02-1 1.svg','05 1.svg','05-1 1.svg','08 1.svg','08-1 1.svg','10 1.svg','10-1 1.svg'],
@@ -94,7 +100,7 @@
       const setCubeDepth=()=>card.style.setProperty('--cube-depth',`${card.clientHeight/2}px`);
       setCubeDepth();
       if('ResizeObserver' in window)new ResizeObserver(setCubeDepth).observe(card);else window.addEventListener('resize',setCubeDepth);
-      const roll=()=>{if(moving)return;moving=true;card.classList.add('is-pressed');setTimeout(()=>card.classList.remove('is-pressed'),180);card.classList.add('is-rolling')};
+      const roll=()=>{if(moving)return;moving=true;playSound(cardTurnSound);card.classList.add('is-pressed');setTimeout(()=>card.classList.remove('is-pressed'),180);card.classList.add('is-rolling')};
       const imageLabel=file=>file.startsWith('left-card-intro.svg')?'왼쪽 인트로 카드':file.startsWith('right-card-ending.svg')?'오른쪽 엔딩 카드':`프로젝트 ${file.replace(' 1.svg','')}`;
       inner.addEventListener('transitionend',event=>{if(event.propertyName!=='transform'||!moving)return;currentIndex=(currentIndex+1)%sequence.length;const currentFile=sequence[currentIndex],nextFile=sequence[(currentIndex+1)%sequence.length];inner.style.transition='none';frontImage.src=`./assets/${currentFile}`;frontImage.alt=imageLabel(currentFile);nextImage.src=`./assets/${nextFile}`;nextImage.alt=imageLabel(nextFile);card.classList.remove('is-rolling');void inner.offsetWidth;inner.style.transition='';moving=false});
       card.addEventListener('click',roll);
