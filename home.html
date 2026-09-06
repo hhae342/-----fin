@@ -88,7 +88,7 @@
     const cubeSequences={
       first:['left-card-intro.svg?v=20260906030739','01 1.svg','01-1 1.svg','04 1.svg','04-1 1.svg','07 1.svg','07-1 1.svg'],
       second:['02 1.svg','02-1 1.svg','05 1.svg','05-1 1.svg','08 1.svg','08-1 1.svg','10 1.svg','10-1 1.svg'],
-      third:['03 1.svg','03-1 1.svg','06 1.svg','06-1 1.svg','09 1.svg','09-1 1.svg','right-card-ending.svg?v=20260906030755']
+      third:['03 1.svg','03-1 1.svg','right-card-ending.svg?v=20260906030755','06 1.svg','06-1 1.svg','09 1.svg','09-1 1.svg']
     };
     document.querySelectorAll('.cube-panel').forEach(card=>{
       const sequence=cubeSequences[card.dataset.column];
@@ -101,7 +101,7 @@
       setCubeDepth();
       if('ResizeObserver' in window)new ResizeObserver(setCubeDepth).observe(card);else window.addEventListener('resize',setCubeDepth);
       const roll=()=>{if(moving)return;moving=true;playSound(cardTurnSound);card.classList.add('is-pressed');setTimeout(()=>card.classList.remove('is-pressed'),180);card.classList.add('is-rolling')};
-      const imageLabel=file=>file.startsWith('left-card-intro.svg')?'왼쪽 인트로 카드':file.startsWith('right-card-ending.svg')?'오른쪽 엔딩 카드':`프로젝트 ${file.replace(' 1.svg','')}`;
+      const imageLabel=file=>file.startsWith('left-card-intro.svg')?'왼쪽 인트로 카드':file.startsWith('right-card-ending.svg')?'디자인대학 다시쓰기 엔딩':`프로젝트 ${file.replace(' 1.svg','')}`;
       inner.addEventListener('transitionend',event=>{if(event.propertyName!=='transform'||!moving)return;currentIndex=(currentIndex+1)%sequence.length;const currentFile=sequence[currentIndex],nextFile=sequence[(currentIndex+1)%sequence.length];inner.style.transition='none';frontImage.src=`./assets/${currentFile}`;frontImage.alt=imageLabel(currentFile);nextImage.src=`./assets/${nextFile}`;nextImage.alt=imageLabel(nextFile);card.classList.remove('is-rolling');void inner.offsetWidth;inner.style.transition='';moving=false});
       card.addEventListener('click',roll);
       card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();roll()}});
