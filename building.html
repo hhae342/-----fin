@@ -1,0 +1,9 @@
+<!doctype html>
+<html lang="ko">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>디자인다시쓰기 체험하기</title><link rel="stylesheet" href="./building.css"></head>
+<body>
+<header><a href="./home.html"><img src="./assets/logo-mov-svg.svg" alt="디자인대학을 해체시키는 시선"></a><a class="back" href="./home.html">← 아카이브로 돌아가기</a></header>
+<main>
+<aside><h1>디자인다시쓰기<br>체험하기</h1><p class="intro">A–J의 하루로<br>공간을 다시 써보세요.</p><div class="rule"></div><h2 class="label">사람을 선택하세요</h2><div id="people-list" class="people-list"></div><div class="actions"><button id="wander">복도 산책 ↗</button><button id="sit">빈자리에 앉기 ↓</button></div><div class="rule"></div><h2 class="label">자리를 선택하세요</h2><span class="note">상징을 누르면 점선 경로를 따라 이동합니다.<br>각 공간은 한 사람씩 이용할 수 있습니다.</span><div class="bottom"><button id="pause" aria-pressed="false">Ⅱ 일시정지</button><button id="reset">↺ 처음으로</button></div></aside>
+<section class="drawing" aria-label="인터랙티브 건축 도면"><div class="map-head"><span>1F — DESIGN COLLEGE</span></div><div class="viewport" id="viewport"><div class="grid-crosses" aria-hidden="true"></div><p id="person-state" class="person-state"></p><span id="status" class="sr-only" role="status" aria-live="polite"></span><svg id="plan" viewBox="-10 0 650 270" xmlns="http://www.w3.org/2000/svg" aria-label="인물과 자리를 선택하는 건축 도면"><g transform="matrix(.5 -.8660254 .8660254 .5 -110 100)"><image href="./assets/building-plan-only.svg" x="0" y="115" width="388.65" height="550"/></g><g id="routes"></g><g id="furniture"></g><g id="people"></g><g id="destination" pointer-events="none"></g></svg></div><div class="map-foot"><div><button id="zoom-out" aria-label="축소">−</button><span id="zoom-value">100%</span><button id="zoom-in" aria-label="확대">+</button></div></div></section>
+</main><script src="./building.js"></script></body></html>

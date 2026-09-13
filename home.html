@@ -19,7 +19,7 @@
     .archive-nav{height:100px;display:flex;align-items:stretch;padding:0 60px;border-bottom:1px solid var(--blue);background:#fff;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;-ms-overflow-style:none}
     .archive-nav::-webkit-scrollbar{display:none;width:0;height:0}
     .archive-nav a{flex:0 0 90px;width:90px;height:100px;border-right:.5px solid var(--blue);background:#fff;overflow:hidden}
-    .archive-nav img{display:block;width:100%;height:100%;max-width:none;transform:scaleX(1.03);transform-origin:center;object-fit:fill}
+    .archive-nav img{display:block;width:100%;height:100%;max-width:none;transform:none;object-fit:contain}
     .archive-nav a:focus-visible{outline:2px solid var(--blue);outline-offset:-3px}
     .home-gallery{height:calc(100svh - 160px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:0 60px;overflow:hidden;background:#fff}
     .home-gallery figure{--cube-depth:300px;position:relative;min-width:0;margin:0;overflow:hidden;cursor:pointer;user-select:none;perspective:1600px;transition:transform .18s ease}
@@ -27,20 +27,26 @@
     .home-gallery figure:not(:last-child){border-right:1px solid var(--blue)}
     .cube-inner{position:relative;width:100%;height:100%;transform-style:preserve-3d;transform:translateZ(calc(var(--cube-depth) * -1));transition:transform .9s cubic-bezier(.55,.05,.18,1);will-change:transform}
     .cube-panel.is-rolling .cube-inner{transform:translateZ(calc(var(--cube-depth) * -1)) rotateX(-90deg)}
-    .cube-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff}
+    .cube-face{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;background:#fff;isolation:isolate}
     .cube-face.front{transform:rotateX(0deg) translateZ(var(--cube-depth))}
+    .cube-face.is-photo img{filter:grayscale(1) contrast(1.3)}
+    .cube-face.is-photo::after{content:"";position:absolute;inset:0;background:#1628d2;mix-blend-mode:screen;pointer-events:none}
     .cube-face.next{transform:rotateX(90deg) translateZ(var(--cube-depth))}
     .home-gallery img{display:block;width:100%;height:100%;object-fit:cover;object-position:center bottom;pointer-events:none}
     .home-gallery .cube-arrow{position:absolute;z-index:5;left:0;bottom:18px;width:100%;height:34px;object-fit:contain;object-position:center;pointer-events:none;transition:transform .18s ease}
     .home-gallery figure.is-pressed .cube-arrow{transform:translateY(2px) scale(1.12)}
     @media(max-width:680px){.archive-header{grid-template-columns:1fr;padding:0 16px}.header-logo{max-width:calc(100vw - 32px)}.header-meta{display:none}.archive-nav{padding:0 12px}.home-gallery{grid-template-columns:1fr;height:auto;padding:0 16px}.home-gallery figure{height:calc((100svh - 160px)/3)}.home-gallery figure:not(:last-child){border-right:0;border-bottom:1px solid var(--blue)}}
+    @font-face{font-family:'Gmarket Sans';src:url('./assets/GmarketSansTTFMedium.ttf') format('truetype');font-weight:400;font-style:normal;font-display:swap}
+    .experience-link{position:fixed;right:24px;bottom:24px;z-index:30;background:var(--blue);color:#fff;padding:14px 20px;text-decoration:none;font-family:'Gmarket Sans',sans-serif;font-weight:400;font-size:13px;line-height:1.5;letter-spacing:0;cursor:pointer;transform-origin:right bottom;transition:transform .2s ease}
+    .experience-link:hover,.experience-link:focus-visible{transform:scale(1.04)}.experience-link:focus-visible{outline:2px solid var(--blue);outline-offset:4px}.experience-link:active{transform:scale(1.01)}
+    @media(prefers-reduced-motion:reduce){.experience-link{transition:none}.experience-link:hover,.experience-link:focus-visible,.experience-link:active{transform:none}}
   </style>
 </head>
 <body>
   <main class="home-shell">
     <header class="archive-header">
       <a href="./home.html" aria-label="홈"><img class="header-logo" src="./assets/logo-mov-svg.svg" alt="디자인대학을 해체시키는 시선"></a>
-      <div class="header-meta"><span>PROJECT 01</span><b>SEOUL · KR</b></div>
+      <div class="header-meta"><span>PROJECT 01</span><b>SEOUL · KR</b></div><a href="./building.html" class="experience-link">디자인대학 다시쓰기 체험하기</a>
     </header>
     <nav class="archive-nav" aria-label="프로젝트 인덱스">
       <a href="./index.html?profile=a" aria-label="프로젝트 A"><img src="./assets/button-a-default.svg" alt=""></a>
@@ -93,16 +99,19 @@
     document.querySelectorAll('.cube-panel').forEach(card=>{
       const sequence=cubeSequences[card.dataset.column];
       const inner=card.querySelector('.cube-inner');
-      const frontImage=card.querySelector('.cube-face.front img');
-      const nextImage=card.querySelector('.cube-face.next img');
+      const frontFace=card.querySelector('.cube-face.front'),nextFace=card.querySelector('.cube-face.next');
+      const frontImage=frontFace.querySelector('img'),nextImage=nextFace.querySelector('img');
       sequence.forEach(file=>{const preload=new Image();preload.src=`./assets/${file}`});
       let currentIndex=0,moving=false;
+      const isPhoto=file=>!file.startsWith('left-card-intro.svg')&&!file.startsWith('right-card-ending.svg');
+      const setFaceImage=(face,image,file)=>{image.src=`./assets/${file}`;image.alt=imageLabel(file);face.classList.toggle('is-photo',isPhoto(file))};
       const setCubeDepth=()=>card.style.setProperty('--cube-depth',`${card.clientHeight/2}px`);
       setCubeDepth();
+      frontFace.classList.toggle('is-photo',isPhoto(sequence[0]));nextFace.classList.toggle('is-photo',isPhoto(sequence[1]));
       if('ResizeObserver' in window)new ResizeObserver(setCubeDepth).observe(card);else window.addEventListener('resize',setCubeDepth);
       const roll=()=>{if(moving)return;moving=true;playSound(cardTurnSound);card.classList.add('is-pressed');setTimeout(()=>card.classList.remove('is-pressed'),180);card.classList.add('is-rolling')};
       const imageLabel=file=>file.startsWith('left-card-intro.svg')?'왼쪽 인트로 카드':file.startsWith('right-card-ending.svg')?'디자인대학 다시쓰기 엔딩':`프로젝트 ${file.replace(' 1.svg','')}`;
-      inner.addEventListener('transitionend',event=>{if(event.propertyName!=='transform'||!moving)return;currentIndex=(currentIndex+1)%sequence.length;const currentFile=sequence[currentIndex],nextFile=sequence[(currentIndex+1)%sequence.length];inner.style.transition='none';frontImage.src=`./assets/${currentFile}`;frontImage.alt=imageLabel(currentFile);nextImage.src=`./assets/${nextFile}`;nextImage.alt=imageLabel(nextFile);card.classList.remove('is-rolling');void inner.offsetWidth;inner.style.transition='';moving=false});
+      inner.addEventListener('transitionend',event=>{if(event.propertyName!=='transform'||!moving)return;currentIndex=(currentIndex+1)%sequence.length;const currentFile=sequence[currentIndex],nextFile=sequence[(currentIndex+1)%sequence.length];inner.style.transition='none';setFaceImage(frontFace,frontImage,currentFile);setFaceImage(nextFace,nextImage,nextFile);card.classList.remove('is-rolling');void inner.offsetWidth;inner.style.transition='';moving=false});
       card.addEventListener('click',roll);
       card.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();roll()}});
     });
