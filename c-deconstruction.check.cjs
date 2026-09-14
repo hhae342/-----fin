@@ -3,6 +3,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const http = require('node:http');
 const os = require('node:os');
+const { pathToFileURL } = require('node:url');
 const { chromium } = require(require.resolve('playwright', { paths: [process.env.NODE_PATH || 'C:/Users/user/.cache/codex-runtimes/codex-primary-runtime/dependencies/node/node_modules'] }));
 
 (async () => {
@@ -22,7 +23,7 @@ const { chromium } = require(require.resolve('playwright', { paths: [process.env
     await page.goto(`http://127.0.0.1:${server.address().port}/index.html?profile=c`);
     await page.locator('.view-slider-labels span').nth(2).click();
     await page.waitForTimeout(700);
-    assert.equal(await page.locator('#stage-guide').isVisible(),false,'C guide is hidden');
+    assert.equal(await page.locator('#stage-guide').isVisible(),true,'C guide is visible');
     assert.equal(await page.locator('#cloud-source').evaluate(e=>getComputedStyle(e).filter),'none');
     await page.evaluate(()=>{
       const create=Matter.Engine.create;
@@ -60,6 +61,44 @@ const { chromium } = require(require.resolve('playwright', { paths: [process.env
     await page.locator('.archive-nav button[data-letter="e"]').click();
     assert.equal(await page.locator('#footage').evaluate(e=>e.classList.contains('cloud-mode')),false);
     assert.equal(await page.locator('#stage-guide').isVisible(),true,'other profiles keep their guide');
+    await page.locator('.archive-nav button[data-letter="d"]').click();
+    await page.waitForTimeout(100);
+    const guideLayout=await page.evaluate(()=>{
+      const guide=document.querySelector('#stage-guide').getBoundingClientRect();
+      const source=document.querySelector('#experience-pixel-source').getBoundingClientRect();
+      return {gap:source.top-guide.bottom,fontSize:getComputedStyle(document.querySelector('#stage-guide')).fontSize};
+    });
+    assert.ok(Math.abs(guideLayout.gap-10)<.2,`guide gap is ${guideLayout.gap}px instead of 10px`);
+    assert.equal(guideLayout.fontSize,'21.3333px','16pt browser-computed size');
+    await page.locator('.archive-nav button[data-letter="i"]').click();
+    await page.locator('.view-slider-labels span').nth(1).click();
+    await page.waitForTimeout(600);
+    const iStepTwo=await page.locator('#deconstruct-image').evaluate(e=>({src:e.getAttribute('src'),complete:e.complete,naturalWidth:e.naturalWidth,display:getComputedStyle(e.parentElement).display,opacity:getComputedStyle(e.parentElement).opacity}));
+    assert.deepEqual(iStepTwo,{src:'./assets/i-09-destory.jpg?v=2026091402',complete:true,naturalWidth:2400,display:'block',opacity:'1'},'I deconstruction image is visible in step 02');
+    assert.match(await page.locator('.image-deconstruct').evaluate(e=>getComputedStyle(e).backgroundImage),/i-09-destory\.jpg/,'I step 02 has a static fallback');
+    await page.locator('.view-slider-labels span').nth(2).click();
+    await page.waitForTimeout(600);
+    assert.equal(await page.locator('#i-ogl-canvas').evaluate(e=>getComputedStyle(e).opacity),'1','I renders before hover');
+    await page.locator('#footage').hover({position:{x:box.width*.5,y:box.height*.5}});
+    await page.waitForTimeout(350);
+    assert.equal(await page.locator('#footage').evaluate(e=>e.classList.contains('i-ogl-mode')),true);
+    assert.equal(await page.locator('#i-ogl-canvas').evaluate(e=>getComputedStyle(e).opacity),'1');
+    assert.equal(await page.locator('#i-ogl-source').evaluate(e=>getComputedStyle(e).opacity),'0');
+    assert.equal(await page.evaluate(()=>typeof OGL.Renderer),'function','OGL is locally available');
+    const iBefore=await page.locator('#i-ogl-canvas').screenshot();
+    await page.locator('#footage').click({position:{x:box.width*.27,y:box.height*.43}});
+    await page.waitForTimeout(850);
+    const iAfter=await page.locator('#i-ogl-canvas').screenshot();
+    assert.notDeepEqual(iAfter,iBefore,'I click creates a new spatial arrangement');
+    const iScreenshot=path.join(os.tmpdir(),'i-ogl-deconstruction.png');
+    await page.locator('#footage').screenshot({path:iScreenshot});
+    await page.locator('#footage').dblclick({position:{x:box.width*.5,y:box.height*.5}});
+    await page.waitForTimeout(850);
+    await page.locator('.archive-nav button[data-letter="e"]').click();
+    await page.locator('.archive-nav button[data-letter="i"]').click();
+    await page.locator('#footage').hover();
+    await page.waitForTimeout(250);
+    assert.equal(await page.locator('#i-ogl-canvas').evaluate(e=>getComputedStyle(e).opacity),'1','I can be revisited');
     await page.locator('.archive-nav button[data-letter="c"]').click();
     await page.setViewportSize({width:760,height:950});
     await page.locator('#footage').hover();
@@ -67,7 +106,20 @@ const { chromium } = require(require.resolve('playwright', { paths: [process.env
     await page.emulateMedia({reducedMotion:'reduce'});
     await page.locator('#footage').dblclick();
     assert.deepEqual(errors,[]);
+    const filePage=await browser.newPage({viewport:{width:1440,height:1000},deviceScaleFactor:1});
+    const fileErrors=[];filePage.on('pageerror',error=>fileErrors.push(error.message));
+    await filePage.goto(`${pathToFileURL(path.join(root,'index.html')).href}?profile=i`);
+    await filePage.locator('.view-slider-labels span').nth(2).click();
+    await filePage.waitForTimeout(700);
+    assert.equal(await filePage.locator('#footage').evaluate(e=>e.classList.contains('i-fallback')),true,'file URL uses visible fallback');
+    assert.equal(await filePage.locator('#footage-canvas').evaluate(e=>getComputedStyle(e).opacity),'1');
+    assert.ok(await filePage.locator('#footage-canvas').evaluate(e=>e.width>100),'fallback canvas is rendered');
+    await filePage.locator('#footage').click({position:{x:280,y:260}});
+    await filePage.waitForTimeout(500);
+    assert.deepEqual(fileErrors,[]);
+    await filePage.close();
     console.log('PASS: drag, settling, pointer leave, rewind, profile switch, resize, reduced motion; no browser errors.');
     console.log(screenshot);
+    console.log(iScreenshot);
   } finally { if (browser) await browser.close(); await new Promise(resolve=>server.close(resolve)); }
 })().catch(error=>{console.error(error);process.exitCode=1;});
