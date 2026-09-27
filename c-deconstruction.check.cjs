@@ -74,8 +74,8 @@ const { chromium } = require(require.resolve('playwright', { paths: [process.env
     await page.locator('.view-slider-labels span').nth(1).click();
     await page.waitForTimeout(600);
     const iStepTwo=await page.locator('#deconstruct-image').evaluate(e=>({src:e.getAttribute('src'),complete:e.complete,naturalWidth:e.naturalWidth,display:getComputedStyle(e.parentElement).display,opacity:getComputedStyle(e.parentElement).opacity}));
-    assert.deepEqual(iStepTwo,{src:'./assets/i-09-destory.jpg?v=2026091402',complete:true,naturalWidth:2400,display:'block',opacity:'1'},'I deconstruction image is visible in step 02');
-    assert.match(await page.locator('.image-deconstruct').evaluate(e=>getComputedStyle(e).backgroundImage),/i-09-destory\.jpg/,'I step 02 has a static fallback');
+    assert.deepEqual(iStepTwo,{src:'./assets/i-09-destory.webp?v=2026091402',complete:true,naturalWidth:1600,display:'block',opacity:'1'},'I deconstruction image is visible in step 02');
+    assert.match(await page.locator('.image-deconstruct').evaluate(e=>getComputedStyle(e).backgroundImage),/i-09-destory\.webp/,'I step 02 has a static fallback');
     await page.locator('.view-slider-labels span').nth(2).click();
     await page.waitForTimeout(600);
     assert.equal(await page.locator('#i-ogl-canvas').evaluate(e=>getComputedStyle(e).opacity),'1','I renders before hover');

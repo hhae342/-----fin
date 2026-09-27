@@ -1,6 +1,9 @@
 (()=>{
   'use strict';
   const $=s=>document.querySelector(s), NS='http://www.w3.org/2000/svg', plan=$('#plan');
+  const controlSound=typeof Audio==='function'?new Audio('./assets/universfield-computer-mouse-click-352734.mp3'):null;
+  if(controlSound){controlSound.preload='auto';controlSound.volume=.3}
+  const playControlSound=()=>{if(!controlSound)return;try{controlSound.currentTime=0;const playback=controlSound.play();if(playback)playback.catch(()=>{})}catch(error){}};
   const letters='ABCDEFGHIJ', project=p=>({x:.5*p.x+.8660254*p.y-110,y:-.8660254*p.x+.5*p.y+100});
   const corridor=[[42,150],[52,182],[62,210],[73,237],[84,263],[99,293],[111,316],[124,340],[138,366],[153,392],[169,417],[184,439],[201,461],[219,483],[239,506],[263,535],[286,560],[307,582]].map(([x,y])=>project({x,y}));
   // Source drawing coordinates: office rooms 112–117 intentionally have no destinations.
@@ -122,8 +125,8 @@
   $('#wander').onclick=()=>route(people[selected],(nearest(people[selected])+5)%corridor.length);
   $('#sit').onclick=()=>{const options=facilities.map((f,i)=>({f,i})).filter(({f})=>['sit','drink'].includes(f.action)&&!spaceTaken(f,selected)).sort((a,b)=>Math.hypot(a.f.x-people[selected].x,a.f.y-people[selected].y)-Math.hypot(b.f.x-people[selected].x,b.f.y-people[selected].y));if(options.length)choose(options[0].i);else tell('이용 가능한 공용 좌석이 없습니다.')};
   function syncPause(){document.body.classList.toggle('paused',paused);$('#pause').textContent=paused?'▶ 움직임 재생':'Ⅱ 일시정지';$('#pause').setAttribute('aria-pressed',String(paused))}
-  $('#pause').onclick=()=>{paused=!paused;syncPause()};syncPause();
-  $('#reset').onclick=()=>{people.forEach((p,i)=>{release(p);Object.assign(p,corridor[i+2],{path:[],room:null,wait:3+i*1.3});pose(p,'idle');p.el.setAttribute('transform','translate('+p.x+' '+p.y+')')});selected=0;updatePanel();tell('A–J의 위치를 처음으로 되돌렸습니다.')};
+  $('#pause').onclick=()=>{playControlSound();paused=!paused;syncPause()};syncPause();
+  $('#reset').onclick=()=>{playControlSound();people.forEach((p,i)=>{release(p);Object.assign(p,corridor[i+2],{path:[],room:null,wait:3+i*1.3});pose(p,'idle');p.el.setAttribute('transform','translate('+p.x+' '+p.y+')')});selected=0;updatePanel();tell('A–J의 위치를 처음으로 되돌렸습니다.')};
   function scale(delta){zoom=Math.max(1,Math.min(2.5,zoom+delta));plan.style.height=zoom*100+'%';plan.style.width=zoom*100+'%';$('#zoom-value').textContent=Math.round(zoom*100)+'%'}
   $('#zoom-in').onclick=()=>scale(.25);$('#zoom-out').onclick=()=>scale(-.25);
   function tick(now){
@@ -142,5 +145,6 @@
     if(people[selected].path.length&&!paused)drawRoute();
     requestAnimationFrame(tick);
   }
+  $('.map-head span').textContent='DESIGN COLLEGE';
   updatePanel();requestAnimationFrame(tick);
 })();

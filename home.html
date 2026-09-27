@@ -89,6 +89,8 @@
     const navigationSound=new Audio('./assets/universfield-computer-mouse-click-352734.mp3');
     cardTurnSound.preload='auto';cardTurnSound.volume=.38;navigationSound.preload='auto';navigationSound.volume=.3;
     const playSound=sound=>{try{sound.currentTime=0;const playback=sound.play();if(playback)playback.catch(()=>{})}catch(error){}}
+    const experienceLink=document.querySelector('.experience-link');
+    experienceLink.addEventListener('click',event=>{if(event.button!==0||event.metaKey||event.ctrlKey||event.shiftKey||event.altKey)return;event.preventDefault();playSound(cardTurnSound);setTimeout(()=>{window.location.href=experienceLink.href},180)});
     document.querySelector('.archive-nav').addEventListener('pointerdown',event=>{if(event.target.closest('a'))playSound(navigationSound)});
     document.querySelector('.archive-nav').addEventListener('keydown',event=>{if((event.key==='Enter'||event.key===' ')&&event.target.closest('a'))playSound(navigationSound)});
     const cubeSequences={
@@ -101,7 +103,6 @@
       const inner=card.querySelector('.cube-inner');
       const frontFace=card.querySelector('.cube-face.front'),nextFace=card.querySelector('.cube-face.next');
       const frontImage=frontFace.querySelector('img'),nextImage=nextFace.querySelector('img');
-      sequence.forEach(file=>{const preload=new Image();preload.src=`./assets/${file}`});
       let currentIndex=0,moving=false;
       const isPhoto=file=>!file.startsWith('left-card-intro.svg')&&!file.startsWith('right-card-ending.svg');
       const setFaceImage=(face,image,file)=>{image.src=`./assets/${file}`;image.alt=imageLabel(file);face.classList.toggle('is-photo',isPhoto(file))};
